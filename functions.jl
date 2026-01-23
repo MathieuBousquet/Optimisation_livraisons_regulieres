@@ -224,26 +224,6 @@ function visualizeOwnInst(numero,nclients,ndays)
         savefig(prefix*string(filename)*"/day_"*string(d))
         close()
     end
-    #=
-    groupsbyday = groupby(data,"day")
-    ndaysbypart = convert(Int,ndays/5)
-    for part= 1:5
-        fig, axs = subplots(2,ndaysbypart,figsize=(22,11))#gridspec_kw=Dict("width_ratios"=>[1, 2]))
-        for index=1:(ndaysbypart)
-            d= index+(part-1)*(ndaysbypart)
-            loyaltygroups=groupby(groupsbyday[keys(groupsbyday)[d]],"loyalty")
-            allkeys = keys(loyaltygroups)
-            for k in eachindex(allkeys) 
-                axs[1,index].scatter(loyaltygroups[allkeys[k]].x,loyaltygroups[allkeys[k]].y,color="C"*string(k-1), label="loyalty class "*string(k-1))
-                axs[2,index].hlines(loyaltygroups[allkeys[k]].client,loyaltygroups[allkeys[k]].earliest,loyaltygroups[allkeys[k]].latest,color="C"*string(k-1))
-            end
-        end
-        axs[1,1].legend(loc="center right",bbox_to_anchor=(0,-0.2))
-        fig.set_title("Positions and time windows (in minuts) of clients n°"*string())
-        savefig("visuels/inst_"*string(numero)*"_part_"*string(1+(part-1)*ndaysbypart)*"-"*string(part*ndaysbypart))
-        close()
-    end
-    =#
 end
 
 function visualizeClustering(instance,clientsbyday,traveltimes)

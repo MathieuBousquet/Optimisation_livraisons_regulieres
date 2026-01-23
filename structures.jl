@@ -23,30 +23,6 @@ mutable struct Delivery
     Delivery(c,l,r) = new( c, l , r)
 end
 =#
-function readSolomonInst()
-    dir="data/solomon-100/"
-    filename="c101.txt"
-    #Get raw data
-    lines = readlines(dir*filename)[10:end]
-    # Ready to store data
-    listc = []
-    # Extract customer data
-    for line in lines
-        # Split line by whitespace
-        values = split(line)
-        # Convert types
-        id = parse(Int, values[1])
-        xcoord = parse(Int, values[2])
-        ycoord = parse(Int, values[3])
-        earliest = parse(Int, values[5])
-        latest = parse(Int, values[6])
-        # Create idcluster Client instance
-        client = Client(id, xcoord, ycoord, 1, earliest, latest)
-        # Add to list
-        push!(listc, client)
-    end
-end
-
 
 # travel time between clients
 function defineTravelTimes(coord)
