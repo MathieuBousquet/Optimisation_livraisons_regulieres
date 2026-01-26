@@ -48,6 +48,6 @@ Les VRP-softTW sont résolus grâce à un algorithme glouton. Au préalable, un 
 afin de garantir une certaine homogénéité dans la répartition des clients sur les tournées. Les clients sont regroupés selon la distance euclidienne d’une part et la différence des centres des
 fenêtres de temps pondérée par la fidélité des clients concernés d’autre part. Les fonctions mises en oeuvre sont les suivantes :
 <ul>
-  <li> clusterClients2 (fichier structures.jl) + greedy2 (fichier greedy.jl) pour glouton avec clustering </li>
-  <li> greedy3 (fichier greedy.jl) pour glouton seul</li>
+    <li> greedy2 (fichier greedy.jl) pour glouton seul</li>
+  <li> clusterClients2 (fichier structures.jl) + greedy3 (fichier greedy.jl) pour glouton avec clustering </li>
 </ul>
