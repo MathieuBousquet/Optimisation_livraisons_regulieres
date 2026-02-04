@@ -61,7 +61,7 @@ Placé dans la fonction generateOwnInst (fichier fonctions.jl), l'algorithme de 
 ##### Visualisation des résultats
 
 La fonction visualizeResults2 (fichier fonctions.jl) permet de produire, pour chaque jour du mois, un fichier texte et un fichier image. Dans le fichier texte, sont détaillées les tournées avec heure de départ, heure d'arrivée, heure de passage chez chaque client et coûts. Le fichier image contient 3 graphiques. Le premier donne un aperçu géographique des tournées. Le second permet d'appréhender les heures de passage par rapport aux fenêtres de temps des clients. Le troisième offre un moyen d'évaluer les pénalités de retard ou d'avance par client.
-<!--
+
 ##### Tests pour les VRP-softTW
 
 Les expérimentations rélisées en combinant clustering et algorithme glouton aboutissent à de bons résultats en termes de temps de calcul, en supposant que l'objectif souhaité est d'une seconde pour résoudre un VRP-softTW (soit 30 secondes pour tout le mois). Le tableau suivant rend compte de ces tests. Les temps y sont donnés arrondis à la seconde et égals à la moyenne de 10 exécutions successives.
@@ -80,4 +80,4 @@ Toutefois, avec la méthode de clustering, de nombreuses tournées sont créées
 L'étude offre une première appproche pour résoudre le TCVRP-softTW. A court terme, il faut avancer dans les recherches afin de disposer de résultats sur l'ensemble des étapes de l'approche. A plus long terme, il est envisagé de lancer plusieurs résolutions du TWPFP et des VRP-softTW en utilisant des méthodes d'apprentissage. 
 
 Par ailleurs, des pistes d'exploration consisteraient à considérer une flotte interne ou des temps de service dans les travaux, ce qui permettrait d'être plus en adéquation avec la réalité des entreprises.
---!>
+
