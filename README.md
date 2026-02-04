@@ -51,3 +51,33 @@ fenêtres de temps pondérée par la fidélité des clients concernés d’autre
     <li> greedy2 (fichier greedy.jl) pour glouton seul</li>
   <li> clusterClients2 (fichier structures.jl) + greedy3 (fichier greedy.jl) pour glouton avec clustering </li>
 </ul>
+
+### Expérimentations
+
+Pour les expérimentations, la période considérée s'étend sur un mois (30 jours).
+##### Génération d'instances
+
+Placé dans la fonction generateOwnInst (fichier fonctions.jl), l'algorithme de génération d'instances se compose de trois étapes : attribution à cHaque client d'une classe et d'un nombre de demandes de livraison, affectation de chaque demande de livraison des clients sur un jour du mois puis procédure de réparation. L'attribution des classes de fidlité et du nombre de demandes de livraison s'effectue selon une loi uniforme tandis que l'affectation des clients sur les jours dépend d'une sorte de roulette biaisée ppar le nombre de demandes de livraisons de chaque client. Le nombre clients à livrer par jour est déterminé par une loi normale dont l'espérance évolue afin que le nombre de clients à livrer chaque jour reste homogène. La procédure de réparation permet de remédier au fait que certaines demandes de livraison peuvent ne pas avoir été prise en compte. Le nombre de demandes mensuelles de chaque client est alors diminué. Les clients peuvent même être changés de classe de fidélité si nécessaire. La limite de l'algorthme proposé est que, si aucune des demandes de livraison d'un client n'a été affceté à un jour,  changer ce client de classe n'est pas possible.
+##### Visualisation des résultats
+
+La fonction visualizeResults2 (fichier fonctions.jl) permet de produire, pour chaque jour du mois, un fichier texte et un fichier image. Dans le fichier texte, sont détaillées les tournées avec heure de départ, heure d'arrivée, heure de passage chez chaque client et coûts. Le fichier image contient 3 graphiques. Le premier donne un aperçu géographique des tournées. Le second permet d'appréhender les heures de passage par rapport aux fenêtres de temps des clients. Le troisième offre un moyen d'évaluer les pénalités de retard ou d'avance par client.
+<!--
+##### Tests pour les VRP-softTW
+
+Les expérimentations rélisées en combinant clustering et algorithme glouton aboutissent à de bons résultats en termes de temps de calcul, en supposant que l'objectif souhaité est d'une seconde pour résoudre un VRP-softTW (soit 30 secondes pour tout le mois). Le tableau suivant rend compte de ces tests. Les temps y sont donnés arrondis à la seconde et égals à la moyenne de 10 exécutions successives.
+<table>
+    <tr><td><table><tr><th>Méthode &rarr;</th></tr><tr><th>Type d'instance &darr;</th></tr></table></td><td>glouton</td><td>clustering + glouton</td></tr>
+    <tr><td>&asymp; 20 clients/jour</td><td> 5</td><td> 1 </td></tr>
+    <tr><td>&asymp; 40 clients/jour </td><td> 24 </td><td>2</td></tr>
+    <tr><td>&asymp; 60 clients/jour</td><td>56</td><td> 3</td></tr>
+    <tr><td>&asymp; 80 clients/jour</td><td> 128</td><td> 6</td></tr>
+</table>
+
+Toutefois, avec la méthode de clustering, de nombreuses tournées sont créées, chacune ne servant que peu de clients. De ce fait, le coût total est plus élevé.
+
+### Perspectives
+
+L'étude offre une première appproche pour résoudre le TCVRP-softTW. A court terme, il faut avancer dans les recherches afin de disposer de résultats sur l'ensemble des étapes de l'approche. A plus long terme, il est envisagé de lancer plusieurs résolutions du TWPFP et des VRP-softTW en utilisant des méthodes d'apprentissage. 
+
+Par ailleurs, des pistes d'exploration consisteraient à considérer une flotte interne ou des temps de service dans les travaux, ce qui permettrait d'être plus en adéquation avec la réalité des entreprises.
+--!>
