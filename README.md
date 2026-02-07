@@ -49,7 +49,7 @@ afin de garantir une certaine homogénéité dans la répartition des clients su
 fenêtres de temps pondérée par la fidélité des clients concernés d’autre part. Les fonctions mises en oeuvre sont les suivantes :
 <ul>
     <li> greedy2 (fichier greedy.jl) pour glouton seul</li>
-  <li> clusterClients2 (fichier structures.jl) + greedy3 (fichier greedy.jl) pour glouton avec clustering </li>
+  <li> clusterClients2 (fichier functions.jl) + greedy3 (fichier greedy.jl) pour glouton avec clustering </li>
 </ul>
 
 ### Expérimentations
