@@ -162,34 +162,11 @@ function readOwnInst(numero,nclients,ndays)
     filename="inst_"*string(numero)*"_"*string(nclients)*"clients_"*string(ndays)*"days"
     data = CSV.read(dir*filename*".csv",DataFrame)
     # Compute travel times
-    coord = select(unique(data,"client"),["client","x","y"])
-    traveltimes = defineTravelTimes(coord)
-    #Return desired data
-    return filename, groupby(data,"day"), traveltimes
-end
-
-
-function readOwnInst2(numero,nclients,ndays)
-    # read into a DataFrame
-    dir = "instances/"
-    filename="inst_"*string(numero)*"_"*string(nclients)*"clients_"*string(ndays)*"days"
-    data = CSV.read(dir*filename*".csv",DataFrame)
-    # Compute travel times
     coord = select(unique(data,"client"),["client","x","y","loyalty"], ["earliest","latest"] => ByRow((e,l) -> (e+l)/2) => "windowcenter")
     traveltimes = defineTravelTimes(coord)
     traveltimes2 = defineTravelTimes2(select(unique(data,"client"),["client","x","y","loyalty"], ["earliest","latest"] => ByRow((e,l) -> (e+l)/2) => "windowcenter"))
-    # Construct clusters of clients
-    groupedclients = groupby(data,"day")
-    for d=1:ndays
-        #groupedclients[(d)].cluster = clusterClients("max",[[[c] for c in groupedclients[(d)].client]], collect(1:cli(groupedclients[(d)],1)),traveltimes,traveltimes2)
-        groupedclients[(d)].cluster = clusterClients2([[c] for c in groupedclients[(d)].client],collect(1:size(groupedclients[(d)],1)),traveltimes,traveltimes2)
-        #push!(ncl,maximum(groupedclients[(d)].cluster ))
-        #push!(nccl,size(groupedclients[(d)],1 ))
-        #clientsclusters = clusterClients3(Dict(groupedclients[(d)].client .=> collect(1:size(groupedclients[(d)],1))),traveltimes,traveltimes2)
-        #groupedclients[(d)].cluster = [ clientsclusters[c] for c in groupedclients[(d)].client ]
-    end
     #Return desired data
-    return filename, groupedclients, traveltimes,traveltimes2
+    return filename, groupby(data,"day"), traveltimes,traveltimes2
 end
 
 function visualizeOwnInst(numero,nclients,ndays)
