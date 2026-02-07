@@ -193,7 +193,7 @@ function greedy3(nclients,ddayclients,t)
     radius=50
     s=0
     f=720
-    ddaycost=Vector{Float64}(undef,3)
+    ddaycost=zeros(Float64,3)
     routes=Route[]
     nroutes = maximum(ddayclients.cluster)
     routes=Vector{Route}(undef,nroutes)
