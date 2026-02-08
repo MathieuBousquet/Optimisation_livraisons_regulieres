@@ -64,7 +64,6 @@ function greedy1(nclients,ddayclients,t)
                 end
             end
         end
-        #println("ff")
         if sum(newcosts) >= 2*timetoclient+10*radius
             push!(routes, Route([client],newhours,newpenalties,newcosts))
             ddaycost += 2*timetoclient+10*radius
@@ -121,7 +120,6 @@ function greedy2(nclients,ddayclients,t)
                     cstrL[end] = @constraint(m, L[lastindex(V)] >= D[-1] - (ddayclients[ddayclients.client .== client,"latest"])[1])
                     cstrE[end] = @constraint(m, E[lastindex(V)] >= (ddayclients[ddayclients.client .== client,"earliest"])[1] - D[-1])
                     @objective(m,Min, sum((ddayclients[ddayclients.client .== V[i],"loyalty"])[1]*(L[i]+E[i]) for i in clientsindex))
-                    #@objective(m,Min, sum(L[i]+E[i] for i in routes[r].clients))
                     for pos=1:lastindex(V)-2
                         routeduration = routes[r].costs[2]
                         if pos == 1
@@ -131,16 +129,10 @@ function greedy2(nclients,ddayclients,t)
                         else
                             routeduration += getTravelTime(t,V[pos],client) + getTravelTime(t,client,V[pos+1]) - getTravelTime(t,V[pos],V[pos+1])
                         end
-                       # println("$client route: $r p: $pos rd: $routeduration")
-                        #println(sum(newcosts),"  ",sum(getTravelTime(t,i,j) for (i,j) in A))
                         if routeduration <= Delta
                             optimize!(m)
-                            #runtime = MOI.get(model, MOI.SolveTime())    (penaltiescost, routeduration)
-                            #println("  ",termination_status(m),"  ",newroute,"  ",sum(newcosts),"  ",sum(value.(L))+sum(value.(E))+sum(getTravelTime(t,i,j) for (i,j) in A))
-                            #penaltiescost = sum(value.(L)) + sum(value.(E))
-                            if has_values(m)# && sum(newcosts) > penaltiescost + routeduration
+                            if has_values(m)
                                 push!(allcandidates,[client,r,pos,value.(D),value.(L) .- value.(E),(sum(value.(L))+sum(value.(E)),routeduration)])
-                                #push!(allcandidates,[client,r,pos,value.(D),value.(L) .- value.(E),(objective_value(m),routeduration)])
                             end
                         end
                         if pos != lastindex(V)-2
@@ -161,7 +153,6 @@ function greedy2(nclients,ddayclients,t)
             end
         end
         sort!(allcandidates,:newcosts,by=sum,rev = true)
-        #println("zzzzzz")
         if isempty(allcandidates) || sum(allcandidates[end,"newcosts"]) >= 2*nextclients[end,"timetodepot"]+10*radius
             nearestclient,timetonearest = pop!(nextclients)
             hourofnearest = ddayclients[ddayclients.client .== nearestclient,"earliest"][1]
@@ -181,10 +172,6 @@ function greedy2(nclients,ddayclients,t)
             lastmodifiedr = newroute
         end
     end
-    #println(routes)
-    #deleteat!(findfirst(==(bestclient),nextclients),nextclients)
-    #subset!(allcandidates)
-    #for client in ddayclients.client[ddayclients.client .!= nearestclient]
     return routes,ddaycost
 end
 
@@ -236,7 +223,6 @@ function greedy3(nclients,ddayclients,t)
                 cstrL[end] = @constraint(m, L[lastindex(V)] >= D[-1] - (clientsdata[clientsdata.client .== client,"latest"])[1])
                 cstrE[end] = @constraint(m, E[lastindex(V)] >= (clientsdata[clientsdata.client .== client,"earliest"])[1] - D[-1])
                 @objective(m,Min, sum((clientsdata[clientsdata.client .== V[i],"loyalty"])[1]*(L[i]+E[i]) for i in clientsindex))
-                #@objective(m,Min, sum(L[i]+E[i] for i in routes[r].clients))
                 for pos=1:lastindex(V)-2
                     routeduration = routes[r].costs[2]
                     if pos == 1
@@ -246,17 +232,13 @@ function greedy3(nclients,ddayclients,t)
                     else
                         routeduration += getTravelTime(t,V[pos],client) + getTravelTime(t,client,V[pos+1]) - getTravelTime(t,V[pos],V[pos+1])
                     end
-                    #println("$client route: $r p: $pos rd: $routeduration")
-                    #if sum(newcosts) > routeduration
                     optimize!(m)
-                    #println("  ",termination_status(m),"  ",sum(newcosts))
                     if has_values(m) && (newclient == 0 || sum(newcosts) > sum(value.(L)) + sum(value.(E)) + routeduration)
                         newclient = client
                         newpos = pos
                         newhours = value.(D)
                         newpenalties = value.(L) .- value.(E)
                         newcosts[1] = sum(value.(L)) + sum(value.(E)) 
-                        #newcosts[1] = objective_value(m) 
                         newcosts[2] = routeduration
                     end
                     #end
@@ -275,7 +257,6 @@ function greedy3(nclients,ddayclients,t)
                 delete(m,cstrE[end])
                 set_objective_sense(m, FEASIBILITY_SENSE)
             end
-           # println("ff")
            ddaycost[1:2] .+= newcosts .- routes[r].costs[1:2]
             routes[r].costs[1:2] .= newcosts
             newhours = Vector(newhours)
@@ -318,7 +299,6 @@ function greedy0(clientslist,t)
                         else
                             routeduration += getTravelTime(t,routes[r].clients[pos-1],client) + getTravelTime(t,client,routes[r].clients[pos]) - getTravelTime(t,routes[r].clients[pos-1],routes[r].clients[pos])
                         end
-                        #println("ffzzzzzzzzzqf")
                         if routeduration <= Delta
                             push!(allcandidates,[client,r,pos,routeduration])
                         end
@@ -327,7 +307,6 @@ function greedy0(clientslist,t)
             end
         end
         sort!(allcandidates,:travelcost,rev = true)
-        #println("ff")
         if isempty(allcandidates) || allcandidates[end,"travelcost"] >= 2*nextclients[end,"timetodepot"]+10*radius
             nearestclient,timetonearest = pop!(nextclients)
             push!(routes, Route([nearestclient],[0],[0],[0,2*timetonearest,10*radius]))
@@ -356,7 +335,7 @@ function greedy0c(clientsclusters,t)
     routes=Route[]
     nroutes = maximum(ddayclients.cluster)
     routes=Vector{Route}(undef,nroutes)
-    ddaycost=0
+    #ddaycost=0
     for r =1:nroutes 
         clientsdata = subset(clientsclusters, :cluster => ByRow(==(r))) 
         nextclients = clientsdata[:,"client"]
@@ -379,7 +358,6 @@ function greedy0c(clientsclusters,t)
                         else
                             routeduration += getTravelTime(t,routes[r].clients[pos-1],client) + getTravelTime(t,client,routes[r].clients[pos]) - getTravelTime(t,routes[r].clients[pos-1],routes[r].clients[pos])
                         end
-                        #println("ffzzzzzzzzzqf")
                         if best == 0 || routeduration < best
                             newclient = client
                             newpos = pos
@@ -387,8 +365,7 @@ function greedy0c(clientsclusters,t)
                         end
                     end
                 end
-            #println("ff")
-            ddaycost += best - routes[r].costs[2]
+            #ddaycost += best - routes[r].costs[2]
             routes[r].costs[2] = best
             insert!(routes[r].clients,newpos,newclient)
             deleteat!(nextclients,findfirst(==(newclient),nextclients))
