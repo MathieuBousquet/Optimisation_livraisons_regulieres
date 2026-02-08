@@ -2,11 +2,13 @@ include("structures.jl")
 
 
 function visualizeOwnInst(numero,nclients,ndays)
-    # read into a DataFrame
     prefix = "instances/visual_"
     filename="inst_"*string(numero)*"_"*string(nclients)*"clients_"*string(ndays)*"days"
-    if !isdir(prefix*string(filename))
-        mkdir(prefix*string(filename))
+    if !isdir("instances")
+        mkdir("instances")
+    end
+    if !isdir(prefix*filename)
+        mkdir(prefix*filename)
     end
     data = CSV.read("instances/"*filename*".csv",DataFrame)
     #loyaltyrange= 1/(1+maximum(data.loyalty))
@@ -37,6 +39,9 @@ end
 
 function visualizeClustering(instance,clientsbyday,traveltimes)
     resultsdir="results_clustering/"*instance
+    if !isdir("results_clustering")
+        mkdir("results_clustering")
+    end
     if !isdir(resultsdir)
         mkdir(resultsdir)
     end
@@ -73,6 +78,9 @@ end
 
 function visualizeResults2(instance,clientsbyday,resultroutes)
     resultsdir="results/"*instance
+    if !isdir("results")
+        mkdir("results")
+    end
     if !isdir(resultsdir)
         mkdir(resultsdir)
     end
@@ -145,6 +153,9 @@ end
 
 function visualizeResults(instance,clientsbyday,resultroutes)
     resultsdir="results/"*instance
+    if !isdir("results")
+        mkdir("results")
+    end
     if !isdir(resultsdir)
         mkdir(resultsdir)
     end
