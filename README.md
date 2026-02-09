@@ -54,7 +54,10 @@ fenêtres de temps pondérée par la fidélité des clients concernés d’autre
 
 ### Expérimentations
 
-Pour les expérimentations, la période considérée s'étend sur un mois (30 jours).
+Pour les expérimentations, la période considérée s'étend sur un mois (30 jours). Depuis le répertoire du projet, tous les tests sont lancés à travers l'interface Julia (REPL) d'un terminal à l'aide de la commande :
+
+include("main.jl")
+
 ##### Génération d'instances
 
 Placé dans la fonction generateOwnInst (fichier fonctions.jl), l'algorithme de génération d'instances se compose de trois étapes : attribution à cHaque client d'une classe et d'un nombre de demandes de livraison, affectation de chaque demande de livraison des clients sur un jour du mois puis procédure de réparation. L'attribution des classes de fidlité et du nombre de demandes de livraison s'effectue selon une loi uniforme tandis que l'affectation des clients sur les jours dépend d'une sorte de roulette biaisée ppar le nombre de demandes de livraisons de chaque client. Le nombre clients à livrer par jour est déterminé par une loi normale dont l'espérance évolue afin que le nombre de clients à livrer chaque jour reste homogène. La procédure de réparation permet de remédier au fait que certaines demandes de livraison peuvent ne pas avoir été prise en compte. Le nombre de demandes mensuelles de chaque client est alors diminué. Les clients peuvent même être changés de classe de fidélité si nécessaire. La limite de l'algorthme proposé est que, si aucune des demandes de livraison d'un client n'a été affceté à un jour,  changer ce client de classe n'est pas possible.
